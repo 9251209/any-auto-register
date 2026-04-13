@@ -69,9 +69,9 @@ class QwenPlatform(BasePlatform):
         if self.mailbox and mail_acct:
             log("Waiting for activation email...")
             activation_link = None
-            for _ in range(otp_timeout // 5):
+            for _ in range(min(10, otp_timeout // 5)):
                 import time
-                time.sleep(5)
+                time.sleep(3)
                 try:
                     messages = self.mailbox.get_messages(mail_acct, before_ids=before_ids)
                     for msg in messages:

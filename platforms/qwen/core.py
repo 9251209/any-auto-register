@@ -150,7 +150,7 @@ class QwenRegister:
         for attempt in range(self._max_retries + 1):
             if attempt > 0:
                 self.log(f"  Retry {attempt}/{self._max_retries}...")
-                time.sleep(10)
+                time.sleep(5)
 
             result = self._try_register(page, email, password, full_name)
             if result.get("token"):
@@ -168,7 +168,7 @@ class QwenRegister:
         try:
             # Step 1: navigate
             page.goto(f"{QWEN_AUTH_URL}?mode=register", wait_until="domcontentloaded", timeout=30000)
-            page.wait_for_timeout(random.randint(3000, 5000))
+            page.wait_for_timeout(1000)
 
             # Step 2: fill full name
             name_input = self._find_input(
@@ -180,9 +180,9 @@ class QwenRegister:
                 ],
             )
             name_input.click()
-            page.wait_for_timeout(200)
+            page.wait_for_timeout(100)
             name_input.fill(full_name)
-            page.wait_for_timeout(random.randint(300, 800))
+            page.wait_for_timeout(100)
 
             # Step 3: fill email
             email_input = self._find_input(
@@ -194,9 +194,9 @@ class QwenRegister:
                 ],
             )
             email_input.click()
-            page.wait_for_timeout(200)
+            page.wait_for_timeout(100)
             email_input.fill(email)
-            page.wait_for_timeout(random.randint(300, 800))
+            page.wait_for_timeout(100)
 
             # Step 4: fill password
             pw_input = self._find_input(
@@ -207,9 +207,9 @@ class QwenRegister:
                 ],
             )
             pw_input.click()
-            page.wait_for_timeout(200)
+            page.wait_for_timeout(100)
             pw_input.fill(password)
-            page.wait_for_timeout(random.randint(300, 800))
+            page.wait_for_timeout(100)
 
             # Step 5: fill confirm password
             cpw_input = self._find_input(
@@ -221,21 +221,21 @@ class QwenRegister:
                 ],
             )
             cpw_input.click()
-            page.wait_for_timeout(200)
+            page.wait_for_timeout(100)
             cpw_input.fill(password)
-            page.wait_for_timeout(random.randint(300, 800))
+            page.wait_for_timeout(100)
 
             # Step 6: accept terms
-            page.wait_for_timeout(random.randint(500, 1000))
+            page.wait_for_timeout(300)
             checkbox = page.query_selector('input[type="checkbox"]')
             if checkbox and checkbox.is_visible():
                 checkbox.click()
-                page.wait_for_timeout(random.randint(300, 600))
+                page.wait_for_timeout(200)
 
             # Step 7: submit
             submit_btn = self._find_submit(page)
             submit_btn.click()
-            page.wait_for_timeout(random.randint(8000, 12000))
+            page.wait_for_timeout(4000)
 
             # Step 8: extract JWT token from "token" cookie
             tokens = self._extract_tokens(page)
